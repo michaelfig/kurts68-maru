@@ -38,4 +38,7 @@ clean : .force
 	rm -f *~ *.o boot-eval eval *.s
 	rm -rf *.dSYM
 
+shell : eval
+	./eval -v -v -v /dev/stdin
+
 .force :
