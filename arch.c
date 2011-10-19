@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 #ifdef __APPLE__
   is__MACH__ = 1;
 #endif
-#ifdef __LINUX__
+#ifdef __linux__
   is__LINUX__ = 1;
 #endif
   is__UNIX__ = ! (is__MACH__ || is__LINUX__);
