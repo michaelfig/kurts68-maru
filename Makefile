@@ -13,11 +13,20 @@ opt : .force
 debuggc : .force
 	$(MAKE) CFLAGS="$(CFLAGS) -DDEBUGGC=1" boot-eval
 
+arch.l : arch
+	./arch > arch.l
+
+arch : arch.c
+	gcc -m32 -o $@ $<
+
 eval : *.l boot-eval
-	time ./boot-eval boot.l emit.l eval.l > eval.s && gcc -m32 -c -o eval.o eval.s && size eval.o && gcc -m32 -o eval eval.o
+	time ./boot-eval arch.l boot.l emit.l eval.l > eval.s || gdb --args ./boot-eval arch.l boot.l emit.l eval.l '>' eval.s
+	gcc -m32 -c -o eval.o eval.s
+	size eval.o
+	gcc -m32 -o eval eval.o
 
 eval2 : eval .force
-	time ./eval boot.l emit.l eval.l > eval2.s
+	time ./eval arch.l boot.l emit.l eval.l > eval2.s
 	diff eval.s eval2.s
 
 stats : .force
